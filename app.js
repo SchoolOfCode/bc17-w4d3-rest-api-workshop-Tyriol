@@ -41,11 +41,27 @@ app.get("/astronauts", async (req, res) => {
 
 /* Write a request handler to return the correct response and perform the correct action when a `POST` request is received to 
 `/astronauts`. Choose the appropriate function from the imported functions at the top of the `app.js` to perform the action. */
+app.post("/astronauts", async (req, res) => {
+  const newAstronaut = await req.body;
+  createAstronaut(newAstronaut);
+  res.json({
+    "success": true,
+    "payload": newAstronaut
+  });
+});
 
 // Task 3
 
 /* Write the request handler to return the data from the function getAstronautById. Have this handler listen to requests at the 
 appropriate path. */
+app.get("/astronauts/:id", async (req, res) => {
+  const params = req.params;
+  const astronaut = await getAstronautById(params.id);
+  res.json({
+    "success": true,
+    "payload": astronaut
+  });
+});
 
 // Task 4
 
