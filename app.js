@@ -31,10 +31,17 @@ res.json({
 function from the imported functions at the top of the `app.js` to get your data. */
 app.get("/astronauts", async (req, res) => {
   const allAstronauts = await getAstronauts();
-  res.json({
-    "success": true,
-    "payload": allAstronauts
-  });
+  try {
+    res.status(200).json({
+      "success": true,
+      "payload": allAstronauts
+    });
+  } catch {
+    res.status(500).json({
+      "success": false,
+      "payload": null
+    });
+  };
 });
 
 // Task 2
@@ -43,11 +50,18 @@ app.get("/astronauts", async (req, res) => {
 `/astronauts`. Choose the appropriate function from the imported functions at the top of the `app.js` to perform the action. */
 app.post("/astronauts", async (req, res) => {
   const newAstronaut = await req.body;
-  createAstronaut(newAstronaut);
-  res.json({
-    "success": true,
-    "payload": newAstronaut
-  });
+  try {
+    createAstronaut(newAstronaut);
+    res.status(201).json({
+      "success": true,
+      "payload": newAstronaut
+    });
+  } catch {
+    res.status(300).json({
+      "success": false,
+      "payload": null
+    });
+  };
 });
 
 // Task 3
@@ -55,8 +69,8 @@ app.post("/astronauts", async (req, res) => {
 /* Write the request handler to return the data from the function getAstronautById. Have this handler listen to requests at the 
 appropriate path. */
 app.get("/astronauts/:id", async (req, res) => {
-  const params = req.params;
-  const astronaut = await getAstronautById(params.id);
+  const id = req.params.id;
+  const astronaut = await getAstronautById(id);
   res.json({
     "success": true,
     "payload": astronaut
@@ -67,6 +81,15 @@ app.get("/astronauts/:id", async (req, res) => {
 
 /* Write the request handler to perform the action and return the data from the function replaceAstronautById. Have this handler 
 listen to requests at the appropriate path. */
+app.put("/astronauts/:id", async (req, res) => {
+  const id = req.params.id;
+  const newAstronaut = req.body;
+  const replacedAstronaut = await replaceAstronautById(id, newAstronaut);
+  res.json({
+    "success": true,
+    "payload": replacedAstronaut
+  });
+});
 
 // Task 5
 
